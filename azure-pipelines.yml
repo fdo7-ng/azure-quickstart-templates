@@ -17,11 +17,11 @@ steps:
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: '<your-resource-manager-connection>'
-    subscriptionId: '<your-subscription-id>'
+    azureResourceManagerConnection: 'fd-RG1-ServiceConnection'
+    subscriptionId: '8f7d862b-5995-401f-a514-7f9f1f9ebae5'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'fd-ARMPipelinesLAMP-rg'
-    location: '<your-closest-location>'
+    location: 'East US 2'
     templateLocation: 'Linked artifact'
     csmFile: '$(Build.ArtifactStagingDirectory)/azuredeploy.json'
     csmParametersFile: '$(Build.ArtifactStagingDirectory)/azuredeploy.parameters.json'
