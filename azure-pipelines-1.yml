@@ -1,0 +1,31 @@
+variables:
+  ARM_PASS: $(adminPass)
+
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '101-vm-multiple-ipconfig'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'fd-RG1-ServiceConnection'
+    subscriptionId: '8f7d862b-5995-401f-a514-7f9f1f9ebae5'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'fd-RG1'
+    location: 'East US 2'
+    dnsLabelPrefix: 'mkline3rw232'
+    dnsLabelPrefix12: 'mkline3rw2332'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(Build.ArtifactStagingDirectory)/azuredeploy.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)/azuredeploy.parameters.json'
+    overrideParameters: '-adminUsername $(adminUser) -adminPassword $(ARM_PASS) -dnsLabelPrefix $(dnsLabelPrefix) -dnsLabelPrefix1 $(dnsLabelPrefix1)'
+    deploymentMode: 'Incremental'
